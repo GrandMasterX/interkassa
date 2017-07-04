@@ -1,0 +1,12 @@
+<?php
+namespace grandmasterx\interkassa\exceptions;
+
+use yii\base\Exception;
+
+class HttpException extends Exception
+{
+    public function getName()
+    {
+        return 'Invalid http response';
+    }
+}
