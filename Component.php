@@ -6,7 +6,6 @@ use grandmasterx\interkassa\exceptions\HttpException;
 use grandmasterx\interkassa\exceptions\InterkassaException;
 use grandmasterx\interkassa\exceptions\WithdrawException;
 use Yii;
-use yii\base\InvalidConfigException;
 
 class Component extends \yii\base\Component
 {
@@ -22,16 +21,6 @@ class Component extends \yii\base\Component
 
     public function init() {
         parent::init();
-
-        if ($this->api_user_id === null || $this->api_user_key === null)
-            throw new InvalidConfigException("Need set api_user_id and api_user_key in config file.");
-
-        if (!in_array($this->sign_algo, [
-            'md5',
-            'sha256'
-        ])
-        )
-            throw new InvalidConfigException("Invalid sign algoritm.");
 
         $this->api = new Api();
     }
@@ -79,8 +68,15 @@ class Component extends \yii\base\Component
      * @return mixed
      * @throws WithdrawException
      */
-    public function withdraw($id, $purse_name, $payway_name, array $details, $amount,
-                             $calcKey = 'ikPayerPrice', $action = 'calc') {
+    public function withdraw(
+        $id,
+        $purse_name,
+        $payway_name,
+        array $details,
+        $amount,
+        $calcKey = 'ikPayerPrice',
+        $action = 'calc'
+    ) {
         $purses = $this->api->getPurses();
         $purse = null;
 
