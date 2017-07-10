@@ -1,4 +1,5 @@
 <?php
+
 namespace grandmasterx\interkassa;
 
 use yii\base\Action;
@@ -8,12 +9,11 @@ class BaseAction extends Action
 {
     public $callback;
 
-    protected function callback($ik_am, $ik_inv_st, $ik_pm_no)
-    {
+    protected function callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id) {
         if (!is_callable($this->callback))
             throw new InvalidConfigException('"' . get_class($this) . '::callback" should be a valid callback.');
 
-        $response = call_user_func($this->callback, $ik_am, $ik_inv_st, $ik_pm_no);
+        $response = call_user_func($this->callback, $ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id);
         return $response;
     }
 }
