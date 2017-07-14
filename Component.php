@@ -2,29 +2,63 @@
 
 namespace grandmasterx\interkassa;
 
-use grandmasterx\interkassa\exceptions\HttpException;
-use grandmasterx\interkassa\exceptions\InterkassaException;
-use grandmasterx\interkassa\exceptions\WithdrawException;
 use Yii;
+use grandmasterx\interkassa\exceptions\HttpException;
+use grandmasterx\interkassa\exceptions\WithdrawException;
+use grandmasterx\interkassa\exceptions\InterkassaException;
 
+/**
+ * Class Component
+ * @package grandmasterx\interkassa
+ */
 class Component extends \yii\base\Component
 {
+    /**
+     * @var
+     */
     public $co_id;
+    /**
+     * @var
+     */
     public $secret_key;
+    /**
+     * @var
+     */
     public $test_key;
+    /**
+     * @var string
+     */
     public $sign_algo = 'md5';
+    /**
+     * @var
+     */
     public $api_user_id;
+    /**
+     * @var
+     */
     public $api_user_key;
+    /**
+     * @var
+     */
     public $api;
 
+    /**
+     *
+     */
     const URL = 'https://sci.interkassa.com/';
 
+    /**
+     *
+     */
     public function init() {
         parent::init();
-
         $this->api = new Api();
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function generateSign(array $params) {
         $pairs = [];
 
@@ -48,23 +82,27 @@ class Component extends \yii\base\Component
         return base64_encode(hash($this->sign_algo, implode(":", $pairs), true));
     }
 
+    /**
+     * @param array $params
+     * @return string
+     */
     public function payment(array $params) {
-        if (!is_array($params))
+        if (!is_array($params)) {
             throw new \InvalidArgumentException('Params must be array');
+        }
 
         $params['ik_co_id'] = $this->co_id;
-
         return self::URL . '?' . http_build_query($params);
     }
 
     /**
-     * @param int $id
-     * @param string $purse_name
-     * @param string $payway_name
+     * @param $id
+     * @param $purse_name
+     * @param $payway_name
      * @param array $details
-     * @param float $amount
-     * @param string $calcKey Allowed: (ikPayerPrice, psPayeeAmount)
-     * @param string $action Allowed: (calc, process)
+     * @param $amount
+     * @param string $calcKey
+     * @param string $action
      * @return mixed
      * @throws WithdrawException
      */
@@ -87,11 +125,13 @@ class Component extends \yii\base\Component
             }
         }
 
-        if ($purse === null)
+        if ($purse === null) {
             throw new WithdrawException("Purse not found");
+        }
 
-        if ($purse->balance < $amount)
+        if ($purse->balance < $amount) {
             throw new WithdrawException("Balance in purse ({$purse->balance}) less withdraw amount ({$amount}).");
+        }
 
         $payways = $this->api->getOutputPayways();
         $payway = null;
@@ -103,8 +143,9 @@ class Component extends \yii\base\Component
             }
         }
 
-        if ($payway === null)
+        if ($payway === null) {
             throw new WithdrawException("Payway not found");
+        }
 
         try {
             $result = $this->api->createWithdraw(
@@ -117,10 +158,11 @@ class Component extends \yii\base\Component
                 $id
             );
 
-            if ($result->{'@resultCode'} == 0)
+            if ($result->{'@resultCode'} == 0) {
                 return $result->transaction;
-            else
+            } else {
                 throw new WithdrawException($result->{'@resultMessage'});
+            }
         } catch (HttpException $e) {
             throw new WithdrawException('Http exception: ' . $e->getMessage());
         } catch (InterkassaException $e) {

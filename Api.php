@@ -2,12 +2,12 @@
 
 namespace grandmasterx\interkassa;
 
-use grandmasterx\interkassa\exceptions\HttpException;
-use grandmasterx\interkassa\exceptions\InterkassaException;
 use Yii;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
 use yii\httpclient\Client;
+use yii\base\InvalidConfigException;
+use grandmasterx\interkassa\exceptions\HttpException;
+use grandmasterx\interkassa\exceptions\InterkassaException;
 
 /**
  * Class Api
@@ -91,9 +91,10 @@ class Api
      */
     public function getCurrencies() {
         $cache = Yii::$app->cache;
-        if (($data = $cache->get('interkassa.currency')) !== null)
+        $data = $cache->get('interkassa.currency');
+        if ($data) {
             return $data;
-        else {
+        } else {
             $response = $this->request('GET', 'currency');
             $cache->set('interkassa.currency', $response, 86400);
             return $response;
@@ -120,9 +121,10 @@ class Api
      */
     public function getOutputPayways() {
         $cache = Yii::$app->cache;
-        if (($data = $cache->get('interkassa.output_payways')) !== null)
+        $data = $cache->get('interkassa.output_payways');
+        if ($data) {
             return $data;
-        else {
+        } else {
             $response = $this->request('GET', 'paysystem-output-payway', null);
             $cache->set('interkassa.output_payways', $response, 86400);
             return $response;
@@ -140,8 +142,9 @@ class Api
      * @throws InvalidConfigException
      */
     public function request($http_method, $method, $lk_api_account_id = null, $data = []) {
-        if (Yii::$app->interkassa === null)
+        if (Yii::$app->interkassa === null) {
             throw new InvalidConfigException("Interkassa component not inited.");
+        }
 
         $client = new Client();
         $request = $client->createRequest()

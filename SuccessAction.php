@@ -1,21 +1,31 @@
 <?php
+
 namespace grandmasterx\interkassa;
 
 use Yii;
 use yii\web\BadRequestHttpException;
 
+/**
+ * Class SuccessAction
+ * @package grandmasterx\interkassa
+ */
 class SuccessAction extends BaseAction
 {
-    public function run()
-    {
+
+    /**
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function run() {
         $ik_pm_no = Yii::$app->request->post('ik_pm_no');
         $ik_am = Yii::$app->request->post('ik_am');
         $ik_inv_st = Yii::$app->request->post('ik_inv_st');
         $ik_inv_id = Yii::$app->request->post('ik_inv_id');
 
-        if (!$ik_pm_no && !$ik_am && !$ik_inv_st && !$ik_inv_id)
+        if (!$ik_pm_no && !$ik_am && !$ik_inv_st && !$ik_inv_id) {
             throw new BadRequestHttpException;
-        else
+        } else {
             return $this->callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id);
+        }
     }
 }

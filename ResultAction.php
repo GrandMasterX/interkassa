@@ -5,8 +5,17 @@ namespace grandmasterx\interkassa;
 use Yii;
 use yii\web\BadRequestHttpException;
 
+/**
+ * Class ResultAction
+ * @package grandmasterx\interkassa
+ */
 class ResultAction extends BaseAction
 {
+
+    /**
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
     public function run() {
         $ik_co_id = Yii::$app->request->post('ik_co_id');
         $ik_pm_no = Yii::$app->request->post('ik_pm_no');
@@ -17,9 +26,10 @@ class ResultAction extends BaseAction
 
         if ($ik_co_id == Yii::$app->interkassa->co_id
             && $ik_sign == Yii::$app->interkassa->generateSign(Yii::$app->request->bodyParams)
-        )
+        ) {
             return $this->callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id);
-        else
+        } else {
             throw new BadRequestHttpException;
+        }
     }
 }
