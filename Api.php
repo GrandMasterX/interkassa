@@ -22,6 +22,29 @@ class Api
     const URL = 'https://api.interkassa.com/v1/';
 
     /**
+     * @var
+     */
+    public $purse;
+
+    /**
+     * @var
+     */
+    public $payway;
+
+    public $testTransaction = false;
+
+    /**
+     * @var
+     */
+    public $lk_api_account_id;
+
+    /**
+     * @var
+     */
+    public $checkoutId;
+
+
+    /**
      * @return null
      */
     public function getAccounts() {
@@ -151,9 +174,14 @@ class Api
             ->setMethod($http_method)
             ->setUrl(self::URL . $method);
 
-        if (count($data) > 0) {
-            $request->setData($data);
+        if (!$data) {
+            $data['checkoutId'] = Yii::$app->interkassa->co_id;
         }
+        if ($method == 'paysystem-output-payway') {
+            $data['purseId'] = $this->purse['id'];
+        }
+
+        $request->setData($data);
 
         if ($lk_api_account_id !== null) {
             $request->addHeaders(['Ik-Api-Account-Id' => $lk_api_account_id]);

@@ -119,47 +119,51 @@ class Component extends \yii\base\Component
         $purse = null;
 
         foreach ($purses as $_purse) {
-            if ($_purse->name == $purse_name) {
+            if ($_purse['name'] == $purse_name || strpos($_purse['name'], $purse_name) !== false) {
                 $purse = $_purse;
+                $this->api->purse = $purse;
                 break;
             }
         }
 
-        if ($purse === null) {
+        if (!$purse) {
             throw new WithdrawException("Purse not found");
         }
 
-        if ($purse->balance < $amount) {
-            throw new WithdrawException("Balance in purse ({$purse->balance}) less withdraw amount ({$amount}).");
+        if (!$this->api->testTransaction) {
+            if ($purse->balance < $amount) {
+                throw new WithdrawException("Balance in purse ({$purse->balance}) less withdraw amount ({$amount}).");
+            }
         }
 
         $payways = $this->api->getOutputPayways();
         $payway = null;
 
         foreach ($payways as $_payway) {
-            if ($_payway->als == $payway_name) {
+            if ($_payway['als'] == $payway_name) {
                 $payway = $_payway;
+                $this->api->payway = $payway;
                 break;
             }
         }
 
-        if ($payway === null) {
+        if (!$payway) {
             throw new WithdrawException("Payway not found");
         }
 
         try {
             $result = $this->api->createWithdraw(
                 $amount,
-                $payway->id,
+                $payway['_id'],
                 $details,
-                $purse->id,
+                $purse['id'],
                 $calcKey,
                 $action,
                 $id
             );
 
             if ($result->{'@resultCode'} == 0) {
-                return $result->transaction;
+                return $result['transaction'];
             } else {
                 throw new WithdrawException($result->{'@resultMessage'});
             }

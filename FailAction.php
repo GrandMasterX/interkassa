@@ -20,7 +20,9 @@ class FailAction extends BaseAction
         $ik_pm_no = Yii::$app->request->post('ik_pm_no');
         $ik_am = Yii::$app->request->post('ik_am');
         $ik_inv_st = Yii::$app->request->post('ik_inv_st');
+        $ik_cur = Yii::$app->request->post('ik_cur');
         $ik_inv_id = Yii::$app->request->post('ik_inv_id');
+        $ik_co_id = Yii::$app->request->post('ik_co_id');
 
         if (!$ik_pm_no && !$ik_am && !$ik_inv_st) {
             throw new BadRequestHttpException;
