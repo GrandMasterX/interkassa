@@ -17,6 +17,7 @@ class ResultAction extends BaseAction
      * @throws BadRequestHttpException
      */
     public function run() {
+        $params = Yii::$app->request->post();
         $ik_co_id = Yii::$app->request->post('ik_co_id');
         $ik_pm_no = Yii::$app->request->post('ik_pm_no');
         $ik_am = Yii::$app->request->post('ik_am');
@@ -27,7 +28,7 @@ class ResultAction extends BaseAction
         if ($ik_co_id == Yii::$app->interkassa->co_id
             && $ik_sign == Yii::$app->interkassa->generateSign(Yii::$app->request->bodyParams)
         ) {
-            return $this->callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id);
+            return $this->callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id, $params);
         } else {
             throw new BadRequestHttpException;
         }

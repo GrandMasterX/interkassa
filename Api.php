@@ -177,7 +177,7 @@ class Api
         if (!$data) {
             $data['checkoutId'] = Yii::$app->interkassa->co_id;
         }
-        if ($method == 'paysystem-output-payway') {
+        if($method == 'paysystem-output-payway') {
             $data['purseId'] = $this->purse['id'];
         }
 

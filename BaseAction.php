@@ -22,15 +22,16 @@ class BaseAction extends Action
      * @param $ik_inv_st
      * @param $ik_pm_no
      * @param $ik_inv_id
+     * @param null $params
      * @return mixed
      * @throws InvalidConfigException
      */
-    protected function callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id) {
+    protected function callback($ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id, $params = null) {
         if (!is_callable($this->callback)) {
             throw new InvalidConfigException('"' . get_class($this) . '::callback" should be a valid callback.');
         }
 
-        $response = call_user_func($this->callback, $ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id);
+        $response = call_user_func($this->callback, $ik_am, $ik_inv_st, $ik_pm_no, $ik_inv_id, $params);
         return $response;
     }
 }
