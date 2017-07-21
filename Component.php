@@ -76,8 +76,12 @@ class Component extends \yii\base\Component
             return $result;
         });
 
-        array_push($pairs, YII_ENV == 'dev' ? $this->test_key
-            : $this->secret_key);
+        array_push(
+            $pairs,
+            (strpos(YII_ENV, 'dev') > -1)
+                ? $this->test_key
+                : $this->secret_key
+        );
 
         return base64_encode(hash($this->sign_algo, implode(":", $pairs), true));
     }
