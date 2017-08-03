@@ -169,7 +169,7 @@ class Component extends \yii\base\Component
             if ($result['@resultCode'] == 0) {
                 return $result['transaction'];
             } else {
-                throw new WithdrawException($result->{'@resultMessage'});
+                throw new WithdrawException($result['@resultMessage']);
             }
         } catch (HttpException $e) {
             throw new WithdrawException('Http exception: ' . $e->getMessage());
