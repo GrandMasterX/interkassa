@@ -166,7 +166,7 @@ class Component extends \yii\base\Component
                 $id
             );
 
-            if ($result->{'@resultCode'} == 0) {
+            if ($result['@resultCode'] == 0) {
                 return $result['transaction'];
             } else {
                 throw new WithdrawException($result->{'@resultMessage'});
