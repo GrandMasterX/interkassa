@@ -123,7 +123,10 @@ class Component extends \yii\base\Component
         $purse = null;
 
         foreach ($purses as $_purse) {
-            if ($_purse['name'] == $purse_name || strpos($_purse['name'], $purse_name) !== false) {
+            if ($_purse['name'] == $purse_name
+                || strpos($_purse['name'], $purse_name) !== false
+                || strpos(mb_strtoupper($_purse['name']), mb_strtoupper($purse_name)) !== false
+            ) {
                 $purse = $_purse;
                 $this->api->purse = $purse;
                 break;
