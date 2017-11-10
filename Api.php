@@ -19,6 +19,101 @@ class Api
     /**
      *
      */
+    const NEW_PAYMENT = 0;
+
+    /**
+     *
+     */
+    const PENDING_PAYMENT = 2;
+
+    /**
+     *
+     */
+    const PROCESSED_BY_PAYMENT_SYSTEM = 3;
+
+    /**
+     *
+     */
+    const IN_REFUND_PROCESS_BY_PAYMENT_SYSTEM = 4;
+
+    /**
+     *
+     */
+    const OVERDUE = 6;
+
+    /**
+     *
+     */
+    const RETURNED_ALREADY = 7;
+
+    /**
+     *
+     */
+    const ENROLLED = 8;
+
+    /**
+     *
+     */
+    const RETURNED_BY_PAYMENT_SYSTEM = 9;
+
+    /**
+     *
+     */
+    const WAITING_MODERATION_APPROVE = 1;
+
+    /**
+     *
+     */
+    const VERIFIED_BY_MODERATOR = 2;
+
+    /**
+     *
+     */
+    const RETURNED_BY_MODERATORS = 3;
+
+    /**
+     *
+     */
+    const FROZEN = 4;
+
+    /**
+     *
+     */
+    const DEFROSTED = 5;
+
+    /**
+     *
+     */
+    const PROCESSING_BY_PAYMENT_SYSTEM = 6;
+
+    /**
+     *
+     */
+    const ENROLLMENT = 7;
+
+    /**
+     *
+     */
+    const SUCCESS = 8;
+
+    /**
+     *
+     */
+    const DECLINED = 9;
+
+    /**
+     *
+     */
+    const RETURNED = 11;
+
+    /**
+     *
+     */
+    const CREATED_BUT_NOT_PROCESSED = 12;
+
+    /**
+     *
+     */
     const URL = 'https://api.interkassa.com/v1/';
 
     /**
@@ -31,7 +126,10 @@ class Api
      */
     public $payway;
 
-    public $testTransaction = false;
+    /**
+     * @var bool
+     */
+    public $testTransaction = true;
 
     /**
      * @var
@@ -43,6 +141,28 @@ class Api
      */
     public $checkoutId;
 
+    /**
+     * @var array
+     */
+    public static $temporaryStatuses = [
+        self::WAITING_MODERATION_APPROVE   => 'WAITING MODERATION APPROVE',
+        self::VERIFIED_BY_MODERATOR        => 'VERIFIED BY MODERATOR',
+        self::FROZEN                       => 'FROZEN',
+        self::DEFROSTED                    => 'DEFROSTED',
+        self::PROCESSING_BY_PAYMENT_SYSTEM => 'PROCESSING BY PAYMENT SYSTEM',
+        self::ENROLLMENT                   => 'ENROLLMENT',
+        self::CREATED_BUT_NOT_PROCESSED    => 'CREATED BUT NOT PROCESSED',
+    ];
+
+    /**
+     * @var array
+     */
+    public static $finalStatuses = [
+        self::RETURNED_BY_MODERATORS => 'RETURNED BY MODERATOR',
+        self::SUCCESS                => 'SUCCESS',
+        self::DECLINED               => 'DECLINED',
+        self::RETURNED               => 'RETURNED',
+    ];
 
     /**
      * @return null
@@ -76,7 +196,7 @@ class Api
      * @return null
      */
     public function getWithdraws() {
-        return $this->request('GET', 'co-invoice/', $this->getLkApiAccountId());
+        return $this->request('GET', 'withdraw/', $this->getLkApiAccountId());
     }
 
     /**
@@ -84,7 +204,7 @@ class Api
      * @return null
      */
     public function getWithdraw($id) {
-        return $this->request('GET', 'co-invoice/' . $id, $this->getLkApiAccountId());
+        return $this->request('GET', 'withdraw/' . $id, $this->getLkApiAccountId());
     }
 
     /**
@@ -177,7 +297,7 @@ class Api
         if (!$data) {
             $data['checkoutId'] = Yii::$app->interkassa->co_id;
         }
-        if($method == 'paysystem-output-payway') {
+        if ($method == 'paysystem-output-payway') {
             $data['purseId'] = $this->purse['id'];
         }
 
