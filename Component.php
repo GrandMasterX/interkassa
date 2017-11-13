@@ -18,7 +18,7 @@ class Component extends \yii\base\Component
      * @var
      */
     public $co_id;
-    
+
     /**
      * @var
      */
@@ -146,7 +146,7 @@ class Component extends \yii\base\Component
 
         if (!$this->api->testTransaction) {
             if ($purse['balance'] < $amount) {
-                throw new WithdrawException("Balance in purse ({$purse->balance}) less withdraw amount ({$amount}).");
+                throw new WithdrawException("Balance in purse ({$purse['balance']}) less withdraw amount ({$amount}).");
             }
         }
 
