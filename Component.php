@@ -13,30 +13,37 @@ use grandmasterx\interkassa\exceptions\InterkassaException;
  */
 class Component extends \yii\base\Component
 {
+
     /**
      * @var
      */
     public $co_id;
+    
     /**
      * @var
      */
     public $secret_key;
+
     /**
      * @var
      */
     public $test_key;
+
     /**
      * @var string
      */
     public $sign_algo = 'md5';
+
     /**
      * @var
      */
     public $api_user_id;
+
     /**
      * @var
      */
     public $api_user_key;
+
     /**
      * @var
      */
@@ -138,7 +145,7 @@ class Component extends \yii\base\Component
         }
 
         if (!$this->api->testTransaction) {
-            if ($purse->balance < $amount) {
+            if ($purse['balance'] < $amount) {
                 throw new WithdrawException("Balance in purse ({$purse->balance}) less withdraw amount ({$amount}).");
             }
         }
@@ -170,7 +177,7 @@ class Component extends \yii\base\Component
             );
 
             if ($result['@resultCode'] == 0) {
-                return $result['transaction'];
+                return $result;
             } else {
                 throw new WithdrawException($result['@resultMessage']);
             }
