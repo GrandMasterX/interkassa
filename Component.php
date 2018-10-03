@@ -47,6 +47,11 @@ class Component extends \yii\base\Component
     /**
      * @var
      */
+    public $purseId;
+
+    /**
+     * @var
+     */
     public $api;
 
     /**
@@ -126,22 +131,25 @@ class Component extends \yii\base\Component
         $calcKey = 'ikPayerPrice',
         $action = 'calc'
     ) {
-        $purses = $this->api->getPurses();
-        $purse = null;
+        if (!$this->purseId) {
+            $purses = $this->api->getPurses();
+            $purse = null;
 
-        foreach ($purses as $_purse) {
-            if ($_purse['name'] == $purse_name
-                || strpos($_purse['name'], $purse_name) !== false
-                || strpos(mb_strtoupper($_purse['name']), mb_strtoupper($purse_name)) !== false
-            ) {
-                $purse = $_purse;
-                $this->api->purse = $purse;
-                break;
+            foreach ($purses as $_purse) {
+                if ($_purse['name'] == $purse_name
+                    || strpos($_purse['name'], $purse_name) !== false
+                    || strpos(mb_strtoupper($_purse['name']), mb_strtoupper($purse_name)) !== false
+                ) {
+                    $purse = $_purse;
+                    $this->api->purse = $purse;
+                    $this->purseId = $purse['id'];
+                    break;
+                }
             }
-        }
 
-        if (!$purse) {
-            throw new WithdrawException("Purse not found");
+            if (!$purse) {
+                throw new WithdrawException("Purse not found");
+            }
         }
 
         if (!$this->api->testTransaction) {
@@ -170,7 +178,7 @@ class Component extends \yii\base\Component
                 $amount,
                 $payway['_id'],
                 $details,
-                $purse['id'],
+                $this->purseId,
                 $calcKey,
                 $action,
                 $id
