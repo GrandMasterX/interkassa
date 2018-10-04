@@ -183,7 +183,7 @@ class Component extends \yii\base\Component
                 $id
             );
 
-            if ($result['@resultCode'] == 0) {
+            if ($result['@resultCode'] == 0 || $result['@resultCode'] == 43101) {
                 return $result;
             } else {
                 throw new WithdrawException($result['@resultMessage']);
