@@ -1,9 +1,9 @@
 <?php
 namespace grandmasterx\interkassa\tests;
 
+use Yii;
 use grandmasterx\interkassa\Api;
 use grandmasterx\interkassa\exceptions\HttpException;
-use Yii;
 
 class ApiTest extends TestCase
 {
