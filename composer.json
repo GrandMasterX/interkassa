@@ -16,7 +16,6 @@
 	],
 	"require": {
 		"php": ">=7.0",
-		"fxp/composer-asset-plugin": "dev-master",
 		"yiisoft/yii2": "2.0.*",
 		"yiisoft/yii2-httpclient": "~2.0.0"
 	},
@@ -29,18 +28,5 @@
 		"psr-4": {
 			"grandmasterx\\interkassa\\": ""
 		}
-	},
-	"config": {
-		"fxp-asset": {
-			"installer-paths": {
-				"bower-asset-library": "vendor/bower"
-			}
-		}
-	},
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://asset-packagist.org"
-		}
-	]
+	}
 }
