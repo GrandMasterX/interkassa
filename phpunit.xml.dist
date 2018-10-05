@@ -10,9 +10,4 @@
          syntaxCheck="true"
          bootstrap="./vendor/autoload.php"
 >
-    <!-- <testsuites>
-        <testsuite name="Yii2mod Test Suite">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites> -->
 </phpunit>
